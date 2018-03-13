@@ -6,7 +6,7 @@
 #define MQTT_SERVER      "mqtt.flespi.io"
 #define MQTT_SERVERPORT  8883
 #define FLESPI_CERT_FINGERPRINT "3B BC 95 33 E5 AB C1 1C C8 FC 37 57 F2 94 2C 43 8E 3B 66 F3"
-#define DEST_TOPIC       "/ESP8266/test"
+#define DEST_TOPIC       "ESP8266/test"
 #define FLESPI_TOKEN    "FlespiToken REPLACE_WITH_YOUR_FLESPI_TOKEN"
 
 #define WLAN_SSID       "SSID"
