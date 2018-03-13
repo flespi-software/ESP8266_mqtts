@@ -1,6 +1,7 @@
 # ESP8266_mqtts
 
 Arduino IDE project: send data from DS18B20 temperature sensor to mqtt.flespi.io via MQTT over SSL.
+Read more in [flespi blog](https://flespi.com/blog/how-to-connect-esp8266-to-secure-mqtt-broker-know-it-all-and-get-it-done-approach)
 
 ## Scheme
 ![Screenshot](/conn_scheme.png?raw=true "ESP8266_DS18B20")

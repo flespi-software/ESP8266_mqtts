@@ -1,3 +1,6 @@
+// This project shows how to send DS18B20 temperature data from ESP8266 board to flespi MQTT broker
+// Read more here https://flespi.com/blog/how-to-connect-esp8266-to-secure-mqtt-broker-know-it-all-and-get-it-done-approach 
+
 #include <ESP8266WiFi.h>
 
 /************************* MAIN DEFINITIONS *********************************/
