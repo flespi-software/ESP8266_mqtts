@@ -1,5 +1,5 @@
 // This project shows how to send DS18B20 temperature data from ESP8266 board to flespi MQTT broker
-// Read more here https://flespi.com/blog/how-to-connect-esp8266-to-secure-mqtt-broker-know-it-all-and-get-it-done-approach 
+// Read more here https://flespi.com/blog/how-to-connect-esp8266-to-secure-mqtt-broker-know-it-all-and-get-it-done-approach
 
 #include <ESP8266WiFi.h>
 
@@ -54,8 +54,7 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: "); Serial.println(WiFi.localIP());
 
-  // connect to server check the fingerprint of flespi.io's SSL cert (from Adafruit MQTTS example)
-  verify_fingerprint(client);
+  client.setFingerprint(FLESPI_CERT_FINGERPRINT);
 }
 
 void loop() {
@@ -80,4 +79,3 @@ void loop() {
   // wait a second before repeat
   delay(1000);
 }
-

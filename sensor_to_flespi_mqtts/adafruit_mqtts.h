@@ -19,29 +19,6 @@
 #include "Adafruit_MQTT_Client.h"
 
 /************************* Internal functions ********************************/
-// Function to verify fingerprint of flespi.io SSL certificate
-// to establish secure connection to flespi MQTT broker
-void verify_fingerprint(WiFiClientSecure client) {
-
-  const char* host = MQTT_SERVER;
-
-  Serial.print("Connecting to ");
-  Serial.println(host);
-
-  if (! client.connect(host, MQTT_SERVERPORT)) {
-    Serial.println("Connection failed. Halting execution.");
-    while(1);
-  }
-
-  if (client.verify(FLESPI_CERT_FINGERPRINT, host)) {
-    Serial.println("Connection secure.");
-  } else {
-    Serial.println("Connection insecure! Halting execution.");
-    while(1);
-  }
-
-}
-
 // Function to connect and reconnect as necessary to the MQTT server.
 // Should be called in the loop function and it will take care if connecting.
 void MQTT_connect(Adafruit_MQTT_Client mqtt) {
@@ -66,4 +43,3 @@ void MQTT_connect(Adafruit_MQTT_Client mqtt) {
 
   Serial.println("MQTT Connected!");
 }
-
