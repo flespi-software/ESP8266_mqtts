@@ -3,13 +3,12 @@
 
 OneWire  ds(ONEWIRE_PIN); // sensor's data wire connected to pin 14
 
-int8_t get_temperature(char* buf) {
+float get_temperature(float* cels_degrees) {
   byte i;
   byte present = 0;
   byte type_s;
   byte data[12];
   byte addr[8];
-  float celsius;
   String temperature;
   
   if ( !ds.search(addr)) {
@@ -62,10 +61,6 @@ int8_t get_temperature(char* buf) {
     else if (cfg == 0x40) raw = raw & ~1; // 11 bit res, 375 ms
     //// default is 12 bit resolution, 750 ms conversion time
   }
-  celsius = (float)raw / 16.0;
-  temperature = String(celsius, 3); // float with 3 decimal places
-  temperature.toCharArray(buf, 8); // 8 is for 3 ceil, comma, 3 decimal places, \0
-  return 0; // data written to buffer 
+  *cels_degrees = (float)raw / 16.0;
+  return 0; // data written to passed variable
 }
-
-

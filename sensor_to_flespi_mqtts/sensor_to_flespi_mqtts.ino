@@ -2,15 +2,18 @@
 // Read more here https://flespi.com/blog/how-to-connect-esp8266-to-secure-mqtt-broker-know-it-all-and-get-it-done-approach
 
 #include <ESP8266WiFi.h>
+#include <Arduino_JSON.h>
 
 /************************* MAIN DEFINITIONS *********************************/
 #define ONEWIRE_PIN      14
+#define STATIC_MESSAGE_BUF_LEN 256
 
 #define MQTT_SERVER      "mqtt.flespi.io"
 #define MQTT_SERVERPORT  8883
 #define FLESPI_CERT_FINGERPRINT "3B BC 95 33 E5 AB C1 1C C8 FC 37 57 F2 94 2C 43 8E 3B 66 F3"
 #define DEST_TOPIC       "ESP8266/test"
 #define FLESPI_TOKEN    "FlespiToken REPLACE_WITH_YOUR_FLESPI_TOKEN"
+#define DEVICE_IDENTIFICATION_STRING "flespi"
 
 #define WLAN_SSID       "SSID"
 #define WLAN_PASS       "PASS"
@@ -26,6 +29,11 @@ WiFiClientSecure client;
 Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, MQTT_SERVERPORT, FLESPI_TOKEN, "");
 // Setup a feed 'flespi' to publish messages to flespi MQTT broker.
 Adafruit_MQTT_Publish flespi = Adafruit_MQTT_Publish(&mqtt, DEST_TOPIC);
+
+// JSON message creation part
+JSONVar message_object;         // to store message parameters
+String json_msg_string;         // to stringify JSON message object
+char message_string_buf[STATIC_MESSAGE_BUF_LEN];   // to use in mqtt publish function
 
 /*************************** Sketch Code ************************************/
 // Generic example for ESP8266 wifi connection
@@ -55,26 +63,42 @@ void setup() {
   Serial.println("IP address: "); Serial.println(WiFi.localIP());
 
   client.setFingerprint(FLESPI_CERT_FINGERPRINT);
+
+  message_object["ident"] = DEVICE_IDENTIFICATION_STRING;
 }
 
 void loop() {
-  char temperature_string_buf[8]; // buffer for sensor's temperature value
+  float cels_degrees;             // temperature sensor value
   int8_t rc;                      // return code for get temperature function
+  // add your sensor variable here e.g.
+  // int my_sensor_value;
 
   // establish MQTT connection
   MQTT_connect(mqtt);
 
   // check for new value on OneWire connected pin
-  rc = get_temperature(temperature_string_buf);
+  rc = get_temperature(&cels_degrees);
   if (rc != 0) {
     //Serial.println(rc);
     return;
   }
-  Serial.print("Temperature value = ");
-  Serial.println(temperature_string_buf);
+
+  // add temperature sensor value to message object
+  message_object["temperature"] = cels_degrees;
+
+  // read add your sensor value and add it to message object, e.g.
+  //my_sensor_value = analogRead(A0);
+  //message_object["analog.input"] = my_sensor_value;
 
   // send data to flespi MQTT broker via secure connection
-  flespi.publish(temperature_string_buf);
+  json_msg_string = JSON.stringify(message_object);
+  json_msg_string.toCharArray(message_string_buf, json_msg_string.length() + 1);
+  Serial.print("Publishing message to broker: ");
+  Serial.println(message_string_buf);
+  flespi.publish(message_string_buf);
+
+  // cleanup memory used
+  memset(message_string_buf, 0, STATIC_MESSAGE_BUF_LEN);
 
   // wait a second before repeat
   delay(1000);
