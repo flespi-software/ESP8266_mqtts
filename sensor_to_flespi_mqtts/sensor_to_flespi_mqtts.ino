@@ -79,12 +79,12 @@ void loop() {
   // check for new value on OneWire connected pin
   rc = get_temperature(&cels_degrees);
   if (rc != 0) {
-    //Serial.println(rc);
-    return;
+    Serial.print("Failed to read one-wire temperature sensor with code: ");
+    Serial.println(rc);
+  } else {
+    // add temperature sensor value to message object
+    message_object["temperature"] = cels_degrees;
   }
-
-  // add temperature sensor value to message object
-  message_object["temperature"] = cels_degrees;
 
   // read add your sensor value and add it to message object, e.g.
   //my_sensor_value = analogRead(A0);
