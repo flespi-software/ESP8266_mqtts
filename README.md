@@ -1,5 +1,7 @@
 # ESP8266_mqtts
 
+### An outdated example, updated and simplified, can be found here: [ESP32/ESP8266 mqtts (rootCA, fingerprint)](https://github.com/flespi-software/ESP32-ESP8266_mqtts)
+
 Arduino IDE project: send data from DS18B20 temperature sensor to mqtt.flespi.io via MQTT over SSL.
 Read more in [flespi blog](https://flespi.com/blog/how-to-connect-esp8266-to-secure-mqtt-broker-know-it-all-and-get-it-done-approach)
 
